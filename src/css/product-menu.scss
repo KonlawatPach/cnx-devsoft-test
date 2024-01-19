@@ -1,0 +1,92 @@
+.product-menu{
+    .product-menu__grid{
+        *{
+            transition: all 200ms;
+        }
+
+        .product-box{
+            border: 1px solid black;
+            border-radius: 20px;
+            height: 490px;
+            cursor: pointer;
+            transition: all 100ms;
+
+            .product-box__image{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 200px;
+                border-bottom: 1px black solid;
+
+                img{
+                    border-radius: 20px 20px 0 0;
+                    max-width: 70%;
+                    max-height: 160px;
+                    transition: all 200ms;
+                }
+            }
+
+            .product-box__content{
+                *{
+                    padding: 0 6px;
+                }
+                
+                .product-box__content--title{
+                    justify-content: center;
+                    align-items: center;
+
+                    background-color: rgb(211, 211, 211);
+                    font-size: 14px;
+                    font-weight: 600;
+                    height: 60px;
+                }
+                .product-box__content--description{
+                    height: 160px;
+                    font-size: 12px;
+                    word-wrap: break-word;
+                }
+                .product-box__content--price{
+                    font-size: 12px;
+                }
+            }
+        }
+
+        // Hover Product-box
+
+        .product-box:hover{
+            *{
+                transition: all 200ms;
+            }
+
+            transition: all 100ms;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.75);
+
+            .product-box__image{
+                img{
+                    max-width: 90%;
+                    max-height: 180px;
+                    transition: all 200ms;
+                }
+            }
+
+            .product-box__content{               
+                .product-box__content--title{
+                    justify-content: center;
+                    align-items: center;
+
+                    background-color: rgb(185, 185, 185);
+                    font-size: 14px;
+                    font-weight: 600;
+                    height: 60px;
+                }
+                .product-box__content--description{
+                    height: 160px;
+                    font-size: 12px;
+                }
+                .product-box__content--price{
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+}
