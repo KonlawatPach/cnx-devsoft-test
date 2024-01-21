@@ -1,24 +1,24 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
-import {  useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 import '../css/product-menu.scss'
 
 function Menu() {
-    const [product, setProduct] = useState([])
+    const navigate = useNavigate();
+    const [productList, setProductList] = useState([])
     const location = useLocation();
 
     useEffect(() => {
-        // console.log('URL changed:', location.search);
         handleFetchData();
     },[location.search])
 
     const fetchData = async (categoryURL = '') => {
         console.log(categoryURL);
         await axios.get(`https://fakestoreapi.com/products${categoryURL}`).then(({data}) =>{
-            setProduct(data);
+            setProductList(data);
             console.log(data);
         })
     }
@@ -46,8 +46,14 @@ function Menu() {
     return (
         <>
             <div className='product-menu container'>
+                
+                <div className='d-flex justify-content-between mb-4'>
+                    <button onClick={() => {navigate('/product/create')}} className='btn btn-primary'>Add New Product</button>
+                    <input type="text" />
+                </div>
+
                 <div className='product-menu__grid row row-cols-lg-5 row-cols-md-4 row-cols-sm-3 row-cols-2 center mx-auto g-2'>
-                    {product.map((data, index) => (
+                    {productList.map((data, index) => (
                         <div className='col' key={index}>
                             <Link to={`product/${data.id}`}>
                                 <div className='product-box text-center'>

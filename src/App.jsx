@@ -10,12 +10,10 @@ import CreateProduct from './components/Create-Product';
 import EditProduct from './components/Edit-Product';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <Router>
       <div className="text-center">
-        <Navbar></Navbar>
+        <Navbar/>
           <Routes>
             <Route exact path='/' element={<Menu />}></Route>
             <Route exact path='/product/:id' element={<ProductInformation />}></Route>
