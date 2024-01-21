@@ -28,8 +28,8 @@ function Navbar() {
 
         <div className='navbar__category d-flex'>
           {category.map((category, index) => (
-            <Link className='navbar__category--border ms-3' key={index}>
-              <b className='navbar__category--text' to={"/"}>{category}</b>
+            <Link className='navbar__category--border ms-3' key={index} to={`/?category=${category}`}>
+              <b className='navbar__category--text'>{category}</b>
             </Link>
           ))}
 

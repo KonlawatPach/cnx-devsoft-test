@@ -1,31 +1,47 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
+import {  useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 import '../css/product-menu.scss'
 
 function Menu() {
     const [product, setProduct] = useState([])
+    const location = useLocation();
 
     useEffect(() => {
-        fetchData()
-    },[])
+        // console.log('URL changed:', location.search);
+        handleFetchData();
+    },[location.search])
 
-    const fetchData = async () => {
-        await axios.get("https://fakestoreapi.com/products").then(({data}) =>{
+    const fetchData = async (categoryURL = '') => {
+        console.log(categoryURL);
+        await axios.get(`https://fakestoreapi.com/products${categoryURL}`).then(({data}) =>{
             setProduct(data);
             console.log(data);
         })
     }
 
+    const handleFetchData = () => {
+        const params = new URLSearchParams(window.location.search);
+        const categoryParams = params.get('category');
+    
+        if (categoryParams !== undefined && categoryParams !== null) {
+          fetchData(`/category/${categoryParams}`);
+        } else {
+          fetchData();
+        }
+    };
+
     const truncateText = (inputText, maxLength) => {
         if (inputText.length > maxLength) {
           return inputText.substring(0, maxLength) + '...';
-        } else {
+        }
+        else {
           return inputText;
         }
-      }
+    }
         
     return (
         <>
@@ -33,19 +49,19 @@ function Menu() {
                 <div className='product-menu__grid row row-cols-lg-5 row-cols-md-4 row-cols-sm-3 row-cols-2 center mx-auto g-2'>
                     {product.map((data, index) => (
                         <div className='col' key={index}>
-                            <div className='product-box text-center'>
-                                <div className='product-box__image'>
-                                    <img className='img-fluid' src={data.image} alt={data.title} />
-                                </div>
+                            <Link to={`product/${data.id}`}>
+                                <div className='product-box text-center'>
+                                    <div className='product-box__image'>
+                                        <img className='img-fluid' src={data.image} alt={data.title} />
+                                    </div>
 
-                                <div className='product-box__content'>
-                                    <h5 data-bs-toggle="tooltip" data-bs-placement="top" title={data.title} className='product-box__content--title d-flex'>{truncateText(data.title, 60)}</h5>
-                                    <p className='product-box__content--description mb-2'>
-                                        {truncateText(data.description, 200)}
-                                    </p>
-                                    <b className='product-box__content--price'>Price : {data.price} $</b>
+                                    <div className='product-box__content'>
+                                        <h5 data-bs-toggle="tooltip" data-bs-placement="top" title={data.title} className='product-box__content--title d-flex'>{truncateText(data.title, 52)}</h5>
+                                        <p className='product-box__content--description mb-2'>{truncateText(data.description, 200)}</p>
+                                        <b className='product-box__content--price'>Price : {data.price} $</b>
+                                    </div>
                                 </div>
-                            </div>
+                            </Link>
                         </div>
                     ))}
                 </div>
