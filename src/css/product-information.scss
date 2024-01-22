@@ -11,22 +11,6 @@
         }
     }
 
-    .productshow__imageinput{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        
-        input{
-            display: none;
-
-            img{
-                max-width: 100%;
-                max-height: 380px;
-            }
-        }
-    }
-
     .productshow__information{
         .productshow__information--description{
             font-size: 14px;

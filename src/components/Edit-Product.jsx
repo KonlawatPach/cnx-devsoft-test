@@ -1,66 +1,149 @@
-import React from 'react'
+import React, { useRef } from 'react';
+import axios from 'axios'
 import { useState, useEffect } from 'react'
-import axios from 'axios';
-import { useNavigate ,useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom'
+import Swal from 'sweetalert2';
 
 import '../css/product-information.scss'
+import '../css/product-form.scss'
 
 
 function EditProduct() {
-  const navigate = useNavigate();
-  const { id } = useParams();
+    const navigate = useNavigate();
+    const { id } = useParams();
+    const fileInputRef = useRef(null);
+    const [categoryList, setcategoryList] = useState([]);
 
-  const [product, setProduct] = useState({})
-  const [cartNumber, setCartNumber] = useState(0)
+    // input
+    const [image, setImage] = useState(null);
+    const [title, setTitle] = useState("");
+    const [price, setPrice] = useState(0);
+    const [category, setCategory] = useState("");
+    const [description, setDescription] = useState("");
 
-  useEffect(() => {
-      fetchData()
-  },[])
+    // load category and old data
+    useEffect(() => {
+        fetchProduct()
+        fetchCategory()
+    }, [])
 
-  const fetchData = async () => {
-      await axios.get(`https://fakestoreapi.com/products/${id}`).then(({data}) =>{
-          setProduct(data);
-      })
-  }
+    const fetchProduct = async () => {
+        await axios.get(`https://fakestoreapi.com/products/${id}`).then((productData) => {
+            setTitle(productData.data.title)
+            setPrice(productData.data.price)
+            setImage(productData.data.image)
+            setCategory(productData.data.category)
+            setDescription(productData.data.description)
+        })
+    }
 
-  const changeCart = (event) => {
-      setCartNumber(Number(event.target.value));
-  }
-  const deleteCart = () => {
-      setCartNumber((prevNumber) => Math.max(prevNumber - 1, 0));
+    const fetchCategory = async () => {
+        await axios.get("https://fakestoreapi.com/products/categories").then((categoryList) => {
+            setcategoryList(categoryList.data);
+        })
+    }
+
+    // image upload
+    const handleClick = () => {
+        fileInputRef.current.click();
     };
-  
-    const addCart = () => {
-      setCartNumber((prevNumber) => prevNumber + 1);
+
+    const handleFileChange = (event) => {
+        const selectedFile = event.target.files[0];
+
+        if (selectedFile) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImage(reader.result);
+            };
+            reader.readAsDataURL(selectedFile);
+        }
     };
-      
-  return (
-      <div className='productshow container mx-auto'>
-          <div className='row gx-5 gy-3'>
-              <div className='productshow__image col-md-6 col-12 border border-dark rounded'>
-                  <img className='mx-auto' src={product.image} alt={product.title} />
-              </div>
-              <div className='productshow__information col-md-6 col-12 text-start px-md-4 px-2'>
-                  <h3 className='fw-bold mb-3'>{product.title}</h3>
-                  <h4 className='mb-2'>Price : {product.price} Dollar</h4>
-                  <p className='productshow__information--description'>{product.description}</p>
 
-                  <div className='productshow__information--cart mt-4 row'>
-                      <div className='productshow__information--cartinput col d-flex'>
-                          <button className="btn btn-primary " onClick={deleteCart}>-</button>
-                          <input className='form-control w-50 text-center' type="number" min={0} onChange={changeCart} value={cartNumber}/>
-                          <button className="btn btn-primary " onClick={addCart}>+</button>
-                      </div>
-                      <button className="btn btn-success col" disabled={cartNumber<=0} onClick={() => {}}>Buy This Product</button>
-                  </div>
-              </div>
-          </div>
+    // upload Product
+    const UpdateProduct = async (e) => {
+        e.preventDefault();
 
-          <div>
-              <button onClick={() => {navigate(`/product/edit/${product.id}`)}} className='btn btn-warning mt-5'>แก้ไขสินค้านี้</button>
-          </div>
-      </div>
-  )
+        // form not complete
+        if (!title.trim() || !price || !description.trim() || image === null) {
+            Swal.fire({
+                icon: "error",
+                text: "Please fill in all required fields."
+            });
+            return;
+        }
+
+        // form complete
+        let formData = {
+            title: title,
+            price: price,
+            description: description,
+            image: 'https://i.pravatar.cc',
+            category: category
+        }
+        formData = JSON.stringify(formData)
+
+        await axios.put(`https://fakestoreapi.com/products/${id}`, formData).then((res) => {
+            Swal.fire({
+                icon: "success",
+                text: `Update ${title}(id: ${res.data.id}) Successfuly!`
+            })
+            navigate(`/product/${id}`)
+
+        }).catch(({ res }) => {
+            Swal.fire({
+                icon: "error",
+                text: res.data.message
+            });
+        })
+
+    }
+
+    return (
+        <div className='productshow container'>
+            <h3 className='mb-4 fw-bold'>Edit Product {}</h3>
+            <form className='row gx-5 gy-3 mx-auto' onSubmit={UpdateProduct}>
+                <div className='productshow__image productshow__imageform col-md-6 col-12 border border-dark rounded' onClick={handleClick}>
+                    <input type="file" ref={fileInputRef} onChange={handleFileChange} />
+                    {image ? (
+                        <img src={image} alt="Upload Product Image" />
+                    ) : (
+                        <p>Click here to upload a Product Image</p>
+                    )}
+                </div>
+                <div className='productshow__informationform col-md-6 col-12 text-start px-md-4 px-2'>
+                    <p>
+                        <label>Product Name : </label>
+                        <input className='form-control border-dark' value={title} type="text" onChange={(event) => { setTitle(event.target.value) }} />
+                    </p>
+
+                    <p>
+                        <label>Price (Dollar) : </label>
+                        <input className='form-control border-dark' value={price} type="number" min="0" onChange={(event) => { setPrice(event.target.value) }} />
+                    </p>
+
+                    <p>
+                        <label>Product Category : </label>
+                        <select className='form-control border-dark' value={category} onChange={(event) => { setCategory(event.target.value) }}>
+                            {categoryList.map((category, index) => (
+                                <option key={index} value={category}>{category}</option>
+                            ))}
+                        </select>
+                    </p>
+
+                    <p>
+                        <label>Product Description : </label>
+                        <textarea className='form-control border-dark' cols="30" rows="10" value={description} onChange={(event) => { setDescription(event.target.value) }}></textarea>
+                    </p>
+
+                </div>
+                <div className='button-bar'>
+                    <button type='submit' className='btn btn-warning'>Update This Product</button>
+                    <button type='button' onClick={() => { navigate(`/product/${id}`) }} className='btn btn-danger'>Cancel</button>
+                </div>
+            </form>
+        </div>
+    )
 }
 
 export default EditProduct

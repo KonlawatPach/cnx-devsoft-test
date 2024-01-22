@@ -1,0 +1,33 @@
+.productshow{
+    form{
+        width: 100%;
+    }
+
+    .productshow__imageform{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        
+        input{
+            display: none;
+
+            img{
+                max-width: 100%;
+                max-height: 380px;
+            }
+        }
+    }
+
+    .productshow__informationform{
+        textarea{
+            height: 164px;
+        }
+    }
+
+    .button-bar{
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+}

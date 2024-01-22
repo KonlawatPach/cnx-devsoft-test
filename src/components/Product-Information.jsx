@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { useNavigate ,useParams } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 import '../css/product-information.scss'
 
@@ -22,16 +23,26 @@ function ProductInformation() {
         })
     }
 
+
+    // cart function
     const changeCart = (event) => {
         setCartNumber(Number(event.target.value));
     }
     const deleteCart = () => {
-        setCartNumber((prevNumber) => Math.max(prevNumber - 1, 0));
-      };
-    
-      const addCart = () => {
-        setCartNumber((prevNumber) => prevNumber + 1);
-      };
+        if(cartNumber>0) setCartNumber(cartNumber-1);
+    }
+    const addCart = () => {
+        setCartNumber(cartNumber+1);
+    }
+
+    // buy function
+    const buyProduct = () => {
+        Swal.fire({
+            icon: "success",
+            text: `Buying ${product.title} ${cartNumber} items!`
+        })
+        navigate(`/`)
+    }
         
     return (
         <div className='productshow container'>
@@ -50,13 +61,13 @@ function ProductInformation() {
                             <input className='form-control w-50 text-center' type="number" min={0} onChange={changeCart} value={cartNumber}/>
                             <button className="btn btn-primary " onClick={addCart}>+</button>
                         </div>
-                        <button className="btn btn-success col" disabled={cartNumber<=0} onClick={() => {}}>Buy This Product</button>
+                        <button className="btn btn-success col" disabled={cartNumber<=0} onClick={buyProduct}>Buy This Product</button>
                     </div>
                 </div>
             </div>
 
             <div>
-                <button onClick={() => {navigate(`/product/edit/${product.id}`)}} className='btn btn-warning mt-5'>แก้ไขสินค้านี้</button>
+                <button onClick={() => {navigate(`/product/edit/${product.id}`)}} className='btn btn-warning mt-5'>Edit This Product</button>
             </div>
         </div>
     )
