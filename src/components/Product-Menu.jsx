@@ -18,10 +18,10 @@ function Menu() {
 
     const fetchData = async (categoryURL = '') => {
         console.log(categoryURL);
-        // await axios.get(`https://fakestoreapi.com/products${categoryURL}`).then(({data}) =>{
-        //     setProductList(data);
-        //     console.log(data);
-        // })
+        await axios.get(`https://fakestoreapi.com/products${categoryURL}`).then(({data}) =>{
+            setProductList(data);
+            console.log(data);
+        })
     }
 
     const handleFetchData = () => {

@@ -27,7 +27,13 @@
 
     .button-bar{
         display: flex;
+        flex-wrap: wrap;
         justify-content: center;
         gap: 20px;
+
+        button[type=reset]{
+            background-color: rgb(149, 0, 0);
+            width: 200px;
+        }
     }
 }

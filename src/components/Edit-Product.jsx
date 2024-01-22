@@ -96,7 +96,37 @@ function EditProduct() {
                 text: res.data.message
             });
         })
+    }
 
+    // delete Product
+    const DeleteProduct = async (e) => {           
+        const isConfirm = await Swal.fire({
+            title: "Delete This Product",
+            text: title,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#3085D6',
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            return result.isConfirmed
+        })
+
+        if (!isConfirm) {
+            return;
+        }
+        await axios.delete(`https://fakestoreapi.com/products/${id}`).then(({ data }) => {
+            Swal.fire({
+                icon: 'success',
+                text: 'Delete Product Succesfuly!'
+            })
+            navigate(`/`)
+        }).catch(({ response: { data } }) => {
+            Swal.fire({
+                text: data.message,
+                icon: 'error'
+            })
+        })
     }
 
     return (
@@ -139,7 +169,8 @@ function EditProduct() {
                 </div>
                 <div className='button-bar'>
                     <button type='submit' className='btn btn-warning'>Update This Product</button>
-                    <button type='button' onClick={() => { navigate(`/product/${id}`) }} className='btn btn-danger'>Cancel</button>
+                    <button type='button' className='btn btn-danger' onClick={() => { navigate(`/product/${id}`) }}>Cancel</button>
+                    <button type='reset' className='btn btn-danger ms-md-5' onClick={DeleteProduct}>Delete</button>
                 </div>
             </form>
         </div>
