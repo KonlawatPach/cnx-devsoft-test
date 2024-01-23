@@ -86,7 +86,7 @@ function CreateProduct() {
   }
 
   return (
-    <div className='productshow container'>
+    <div className='productshow container mt-5'>
       <h3 className='mb-4 fw-bold'>New Product Form</h3>
       <form className='row gx-5 gy-3 mx-auto' onSubmit={newProduct}>
         <div className='productshow__image productshow__imageform col-md-6 col-12 border border-dark rounded' onClick={handleClick}>

@@ -1,4 +1,14 @@
 .product-menu{
+    .img-fluid{
+        width: 100%;
+    }
+    .product-menu__top{
+        input{
+            width: 160px;
+            border: 1px solid black;
+        }
+    }
+
     .product-menu__grid{
         *{
             text-decoration: none;

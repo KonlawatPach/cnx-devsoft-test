@@ -45,7 +45,7 @@ function ProductInformation() {
     }
         
     return (
-        <div className='productshow container'>
+        <div className='productshow container mt-5'>
             <div className='mx-auto row gx-5 gy-3'>
                 <div className='productshow__image col-md-6 col-12 border border-dark rounded'>
                     <img className='mx-auto' src={product.image} alt={product.title} />

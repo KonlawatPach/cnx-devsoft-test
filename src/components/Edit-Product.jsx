@@ -130,7 +130,7 @@ function EditProduct() {
     }
 
     return (
-        <div className='productshow container'>
+        <div className='productshow container mt-5'>
             <h3 className='mb-4 fw-bold'>Edit Product {}</h3>
             <form className='row gx-5 gy-3 mx-auto' onSubmit={UpdateProduct}>
                 <div className='productshow__image productshow__imageform col-md-6 col-12 border border-dark rounded' onClick={handleClick}>
